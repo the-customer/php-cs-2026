@@ -1,37 +1,8 @@
 <?php 
-  
-  //un commentaire
-  # un commentaire
-  // Les variables:
 
-  // $nom =  "Niang";
-  // $prenom = "Toto";
-  // $matricule = "001454";
-  // $moyenne = 15.5;
+  //Variables super globales : $_POST, $_GET, $_SERVER
 
-  // $infos = ["Niang","Toto","001454",15];
-
-
-  // $infos = [
-  //   "nom"=>"Niang",
-  //   "prenom"=>"Toto",
-  //   "matricule"=>"001454",
-  //   "moyenne"=>15
-  // ];
-
-  // echo "Mon prenom est $infos[0]";
-  // echo "Mon prenom est $infos['prenom']";
-
-  // echo "Mon nom est : <strong>$nom</strong> <br>";
-  // echo $nom;
-  // echo '$nom sdlkfjsd klfj sdlkx';
-
-  echo $_POST["email"];
-
-  // Exercice :
-  // Faire tout pour que lorsqu'on soumet le formulaire, on affiche :
-  //   Bienvenue ... (email), votre mot de passe est : ...
-  // IL n'y doit pas avoir d'erreur avant la soumission : piste : tester si le formulaire est soumis avant d'afficher le message
+  //$_SERVER["REQUEST_METHOD"]  // POur savoir avec quelle methode le client est arrive au serveur
 
   $appName = "Breukh School";
   $pageTitle = "Connexion";
@@ -46,6 +17,25 @@
   $adminName = 'Admin Principal';
   $appVersion = '1.0.0';
   $isOnline = true;
+  $errors = [];
+//tester si on a soumis le formulaire
+  if($_SERVER["REQUEST_METHOD"] === "POST"){ 
+    //recuperer les donnees du formulaire
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    //tester si l'utilisateur a saisi un email.
+    if($email == ""){
+      $errors["email"] = "The email address is required.";
+    }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $errors["email"] = "The email address is not valid.";
+    }
+
+    //continuer ..... le reste : le mot de passe est requis et doit au min avoir 4 caracteres
+  }
+
+  //Essayer d'afficher les erreurs
+
+
 ?>
 <!doctype html>
 <html>
@@ -108,13 +98,15 @@
         <form action="index.php" method="POST" class="space-y-5">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adresse email</label>
-            <input type="email" id="email" name="email" placeholder="exemple@email.com" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="email" name="email" placeholder="exemple@email.com" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
           </div>
 
           <div>
             <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
             <input type="password" id="password" name="password" placeholder="Votre mot de passe" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
           </div>
+
+          <!-- <input name="btn" value="aaa" type="submit" class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 hover:cursor-pointer"> -->
 
           <button type="submit" class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 hover:cursor-pointer">Se connecter</button>
         </form>
