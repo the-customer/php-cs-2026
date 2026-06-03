@@ -1,4 +1,9 @@
 <?php
+/*
+EXERCICE :
+AFFICHER DYNAMIQUEMENT LES STATUT AVEC DEUX COULEURS DIFFERENTES:
+AFFICHER DYNAMIQUEMENT LA LISTE DES COURS EN BAS.
+*/
 $appName = "Gestion Scolaire";
 $pageTitle = "Tableau de bord";
 $currentYear = date("Y");
@@ -20,7 +25,7 @@ $students = [
         "first_name" => "Mamadou",
         "last_name" => "Sarr",
         "level" => "L2",
-        "average" => 12.0,
+        "average" => 8.6,
         "status" => "active"
     ],
     [
@@ -47,6 +52,7 @@ $students = [
         "average" => 11.0,
         "status" => "active"
     ]
+
 ];
 
 $courses = [
@@ -84,13 +90,21 @@ $inactiveStudents = 0;
 $admittedStudents = 0;
 $failedStudents = 0;
 
-for($i=0; $i<count($students);$i++){
-    echo $students[$i]["id"]." ".$students[$i]["first_name"];
+
+foreach ($students as $student) {
+    if ($student["status"] == "active") {
+        $activeStudents++;
+    } else {
+        $inactiveStudents++;
+    }
+
+    if ($student["average"] >= 10) {
+        $admittedStudents++;
+    } else {
+        $failedStudents++;
+    }
 }
 
-foreach($students as $s){
-    echo $s["id"]." ".$s["first_name"];
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +122,8 @@ foreach($students as $s){
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div>
                 <h1 class="text-xl font-bold text-blue-700">
-                    Mini School Portal </h1>
+                    <?= $appName ?>
+                </h1>
                 <p class="text-sm text-gray-500">
                     Tableau de bord administrateur
                 </p>
@@ -116,7 +131,7 @@ foreach($students as $s){
 
             <div class="flex items-center gap-4">
                 <p class="text-sm text-gray-600">
-                    Connecté : <span class="font-semibold">Admin Principal</span>
+                    Connecté : <span class="font-semibold"><?= $adminName ?></span>
                 </p>
 
                 <a href="index.php"
@@ -133,7 +148,7 @@ foreach($students as $s){
         <!-- Titre -->
         <div class="mb-8">
             <h2 class="text-3xl font-bold text-gray-800">
-                Bienvenue, Admin Principal </h2>
+                Bienvenue, <?= $adminName ?> </h2>
             <p class="text-gray-500">
                 Voici un aperçu des données de la plateforme.
             </p>
@@ -144,25 +159,29 @@ foreach($students as $s){
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-sm text-gray-500">Total étudiants</p>
                 <p class="text-3xl font-bold text-gray-800 mt-2">
-                    5 </p>
+                    <?= $totalStudents ?>
+                </p>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-sm text-gray-500">Étudiants actifs</p>
                 <p class="text-3xl font-bold text-green-600 mt-2">
-                    4 </p>
+                    <?= $activeStudents ?>
+                </p>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-sm text-gray-500">Étudiants admis</p>
                 <p class="text-3xl font-bold text-blue-600 mt-2">
-                    3 </p>
+                    <?= $admittedStudents ?>
+                </p>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-sm text-gray-500">Cours disponibles</p>
                 <p class="text-3xl font-bold text-purple-600 mt-2">
-                    4 </p>
+                    <?= $totalCourses ?>
+                </p>
             </div>
         </section>
 
@@ -179,7 +198,15 @@ foreach($students as $s){
                 </div>
 
                 <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                    5 étudiants
+                    <?= $totalStudents ?>
+                    <?php
+                    /*if($totalStudents > 1) {
+                        echo "étudiants";
+                    }else{
+                        echo "étudiant";
+                    }*/
+                    ?>
+                    <?= $totalStudents > 1 ? "étudiants" : "étudiant" ?>
                 </span>
             </div>
 
@@ -198,161 +225,49 @@ foreach($students as $s){
                     </thead>
 
                     <tbody class="divide-y divide-gray-100">
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                1 </td>
+                        <?php foreach($students as $student): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm text-gray-700">
+                                    <?= $student["id"] ?>
+                                </td>
 
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Awa </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">
+                                    <?= $student["first_name"] ?>
+                                </td>
 
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Diop </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">
+                                    <?= $student["last_name"] ?>
+                                </td>
 
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                    L1 </span>
-                            </td>
+                                <td class="px-6 py-4 text-sm">
+                                    <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
+                                        <?= $student["level"] ?>
+                                    </span>
+                                </td>
 
-                            <td class="px-6 py-4 text-sm font-semibold">
-                                14.5/20
-                            </td>
+                                <td class="px-6 py-4 text-sm font-semibold">
+                                    <?= $student["average"] ?>
+                                </td>
 
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
-                                    Admis
-                                </span>
-                            </td>
+                                <td class="px-6 py-4 text-sm">
+                                    <?php if($student["average"] >= 10): ?>
+                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
+                                            Admis
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold">
+                                            Non admis
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
 
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                                    Actif
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                2 </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Moussa </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Fall </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                    L1 </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm font-semibold">
-                                9.75/20
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold">
-                                    Non admis
-                                </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                                    Actif
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                3 </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Fatou </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Ndiaye </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                    L2 </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm font-semibold">
-                                16.25/20
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
-                                    Admis
-                                </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                                    Actif
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                4 </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Ibrahima </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Ba </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                    L1 </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm font-semibold">
-                                7.5/20
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold">
-                                    Non admis
-                                </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full font-semibold">
-                                    Inactif
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                5 </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Mariama </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                Sarr </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                    L2 </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm font-semibold">
-                                12/20
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
-                                    Admis
-                                </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm">
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                                    Actif
-                                </span>
-                            </td>
-                        </tr>
+                                <td class="px-6 py-4 text-sm">
+                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                                        Actif
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
